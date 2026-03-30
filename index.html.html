@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú - ¡Que! ¡Fresa!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Pacifico&display=swap" rel="stylesheet">
+    
+    <!-- Configuración de Tailwind para colores personalizados -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        pacifico: ['Pacifico', 'cursive'],
+                    },
+                    colors: {
+                        fresa: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #fdf2f8;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(330,100%,94%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 100%, hsla(330,100%,94%,1) 0, transparent 50%);
+            background-attachment: fixed;
+            margin: 0; 
+            overflow-x: hidden;
+        }
+        
+        /* Animaciones Personalizadas */
+        .neon-pulse { animation: pulse-shadow 2.5s infinite alternate; }
+        @keyframes pulse-shadow {
+            0% { box-shadow: 0 0 15px rgba(236, 72, 153, 0.4), 0 0 30px rgba(236, 72, 153, 0.2); }
+            100% { box-shadow: 0 0 25px rgba(236, 72, 153, 0.7), 0 0 50px rgba(236, 72, 153, 0.4); transform: scale(1.02); }
+        }
+
+        .float-anim { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Clases para animación al hacer scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Efecto de cristal para el menú superior */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Ocultar barra de desplazamiento para menú horizontal móvil */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Estilos para ocultar el widget de Google Translate nativo */
+        #google_translate_element { display: none !important; }
+        .skiptranslate iframe { display: none !important; }
+        body { top: 0px !important; }
+        font { background: transparent !important; color: inherit !important; box-shadow: none !important; }
+
+        /* Diseño de scrollbar web */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fdf2f8; }
+        ::-webkit-scrollbar-thumb { background: #f9a8d4; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f472b6; }
+
+        /* Marca de agua AD */
+        body::after {
+            content: "RECREADA O HECHA POR AD";
+            position: fixed;
+            bottom: 6px;
+            left: 8px;
+            font-size: 9px;
+            color: rgba(0, 0, 0, 0.25);
+            z-index: 999999;
+            pointer-events: none;
+            user-select: none;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased selection:bg-fresa-300 selection:text-white">
+
+    <!-- Widget Oculto de Traducción -->
+    <div id="google_translate_element"></div>
+
+    <!-- Menú Superior (Navegación) -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300 shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20">
+                <!-- Logo Nav -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer float-anim" onclick="window.scrollTo(0,0)">
+                    <span class="font-pacifico text-2xl sm:text-3xl text-fresa-500">¡Que! ¡Fresa!</span>
+                </div>
+                
+                <!-- Enlaces Nav (Desktop) -->
+                <div class="hidden md:flex space-x-6 lg:space-x-8 items-center">
+                    
+                    <!-- Submenú Desplegable -->
+                    <div class="relative group py-4">
+                        <button class="text-gray-600 hover:text-fresa-500 font-semibold transition-colors flex items-center gap-1 cursor-pointer">
+                            Nuestro Menú
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <!-- Panel del submenú -->
+                        <div class="absolute top-full left-0 mt-[-5px] w-52 bg-white rounded-2xl shadow-xl border border-fresa-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left scale-95 group-hover:scale-100 flex flex-col overflow-hidden">
+                            <a href="#clasicas" class="px-5 py-3 text-gray-700 hover:bg-fresa-50 hover:text-fresa-500 font-medium transition-colors border-b border-gray-50 flex items-center gap-2">🍓 Clásicas</a>
+                            <a href="#especialidades" class="px-5 py-3 text-gray-700 hover:bg-fresa-50 hover:text-fresa-500 font-medium transition-colors border-b border-gray-50 flex items-center gap-2">✨ Especialidades</a>
+                            <a href="#bebidas" class="px-5 py-3 text-gray-700 hover:bg-fresa-50 hover:text-fresa-500 font-medium transition-colors flex items-center gap-2">🥤 Bebidas</a>
+                        </div>
+                    </div>
+                    
+                    <a href="#combos" class="text-gray-600 hover:text-fresa-500 font-semibold transition-colors">Combos</a>
+                    <a href="#galeria" class="text-gray-600 hover:text-fresa-500 font-semibold transition-colors">Galería</a>
+                    
+                    <!-- Toggle Idioma Desktop -->
+                    <div class="flex items-center gap-1 bg-fresa-50/80 p-1 rounded-full border border-fresa-100 shadow-inner" role="group" aria-label="Selección de idioma">
+                        <button onclick="changeLanguage('es')" aria-label="Cambiar idioma a Español" class="lang-btn-es text-xs font-extrabold bg-white text-fresa-600 px-2.5 py-1.5 rounded-full shadow-sm transition-all">ES</button>
+                        <button onclick="changeLanguage('en')" aria-label="Cambiar idioma a Inglés" class="lang-btn-en text-xs font-extrabold text-gray-400 px-2.5 py-1.5 rounded-full hover:text-fresa-500 transition-all">EN</button>
+                    </div>
+
+                    <!-- Botón Carrito Nav -->
+                    <button onclick="toggleCart()" aria-label="Ver carrito de compras" aria-expanded="false" aria-controls="cart-drawer" class="bg-fresa-500 hover:bg-fresa-600 text-white px-5 py-2 rounded-full font-bold shadow-lg shadow-fresa-500/30 transition-all hover:-translate-y-1 flex items-center gap-2">
+                        <span aria-hidden="true">Mi Orden</span>
+                        <span class="cart-badge hidden bg-white text-fresa-500 text-xs w-5 h-5 rounded-full items-center justify-center font-extrabold shadow-sm" aria-hidden="true">0</span>
+                    </button>
+                </div>
+                
+                <!-- Controles Móvil -->
+                <div class="md:hidden flex items-center gap-3">
+                    <!-- Toggle Idioma Móvil -->
+                    <div class="flex items-center gap-1 bg-fresa-50/80 p-1 rounded-full border border-fresa-100 shadow-inner mr-1" role="group" aria-label="Selección de idioma">
+                        <button onclick="changeLanguage('es')" aria-label="Español" class="lang-btn-es-mob text-[10px] font-extrabold bg-white text-fresa-600 px-2 py-1 rounded-full shadow-sm transition-all">ES</button>
+                        <button onclick="changeLanguage('en')" aria-label="Inglés" class="lang-btn-en-mob text-[10px] font-extrabold text-gray-400 px-2 py-1 rounded-full hover:text-fresa-500 transition-all">EN</button>
+                    </div>
+
+                    <button onclick="toggleCart()" aria-label="Ver carrito de compras" aria-expanded="false" aria-controls="cart-drawer" class="relative text-fresa-500 p-2 bg-fresa-50 rounded-full shadow-sm border border-fresa-100">
+                        <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span class="cart-badge hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full items-center justify-center font-bold border border-white" aria-hidden="true">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menú Horizontal Deslizable para Móvil (Se ve moderno tipo app nativa) -->
+            <div class="md:hidden flex overflow-x-auto pb-3 pt-1 hide-scrollbar space-x-6 px-1 border-t border-gray-100/50" role="navigation" aria-label="Menú de categorías">
+                <a href="#clasicas" class="text-sm font-bold text-gray-600 hover:text-fresa-500 whitespace-nowrap transition-colors flex items-center gap-1.5"><span aria-hidden="true" class="text-base">🍓</span> Clásicas</a>
+                <a href="#especialidades" class="text-sm font-bold text-gray-600 hover:text-fresa-500 whitespace-nowrap transition-colors flex items-center gap-1.5"><span aria-hidden="true" class="text-base">✨</span> Especialidades</a>
+                <a href="#bebidas" class="text-sm font-bold text-gray-600 hover:text-fresa-500 whitespace-nowrap transition-colors flex items-center gap-1.5"><span aria-hidden="true" class="text-base">🥤</span> Bebidas</a>
+                <a href="#combos" class="text-sm font-bold text-gray-600 hover:text-fresa-500 whitespace-nowrap transition-colors flex items-center gap-1.5"><span aria-hidden="true" class="text-base">🔥</span> Combos</a>
+                <a href="#galeria" class="text-sm font-bold text-gray-600 hover:text-fresa-500 whitespace-nowrap transition-colors flex items-center gap-1.5"><span aria-hidden="true" class="text-base">📸</span> Galería</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal Principal -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 sm:pt-32 flex flex-col lg:flex-row gap-8 lg:gap-12 min-h-screen">
+        
+        <!-- Columna Izquierda / Encabezado (Sticky en Desktop) -->
+        <div class="w-full lg:w-5/12 relative">
+            <div class="lg:sticky lg:top-32 bg-white/60 backdrop-blur-xl p-8 sm:p-10 rounded-[3rem] border-4 border-white shadow-2xl shadow-fresa-200/50 flex flex-col items-center justify-center text-center reveal active">
+                
+                <!-- Decoración de fondo abstracta -->
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-fresa-300 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-pulse"></div>
+                <div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-purple-300 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-pulse" style="animation-delay: 1s;"></div>
+
+                <!-- Imagen del Logo -->
+                <div class="relative mb-8 group cursor-pointer">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-fresa-400 to-purple-400 rounded-full blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
+                    <img src="https://blogger.googleusercontent.com/img/a/AVvXsEg2mVJ6kqB-d414vDPc7gNPKGWvHgRogQsGTAIw3B0WKTppiztnODt1uyL6_wsT2edQkGkuVRwHbTyvmE7o8A8rIdin9irxX9iNSmNlu5RjiQrGmV_9nsdOm7ktgFmQS1Oa03nWJx_o6Kbv3oMNWdOBqDPk7WQNyoqdJsvEx-YH75Zicn43pP6ZY1DbFm4=w488-h488" alt="Logo Que Fresa" 
+                         class="relative w-48 h-48 sm:w-64 sm:h-64 object-cover rounded-full border-4 border-white neon-pulse z-10" 
+                         onerror="this.src='https://placehold.co/400x400/ffb6c1/ffffff?text=Falta+Logo'">
+                    
+                    <!-- Badge flotante -->
+                    <div class="absolute -bottom-2 -right-2 bg-white text-fresa-500 px-4 py-2 rounded-full font-bold shadow-lg text-sm sm:text-base border-2 border-fresa-100 float-anim z-20">
+                        ¡100% Frescas!
+                    </div>
+                </div>
+
+                <h1 class="text-5xl sm:text-7xl font-extrabold text-gray-900 mb-2 tracking-tight leading-none">
+                    ¡Que! <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-fresa-500 to-purple-500">¡Fresa!</span>
+                </h1>
+                <p class="font-pacifico text-2xl sm:text-3xl text-fresa-500 mt-4">¡Tan 'fresa' que te va a encantar!</p>
+                
+                <p class="mt-6 text-gray-600 font-medium px-4">
+                    Expertos en fresas con crema. Preparadas al momento con ingredientes de la más alta calidad y un toque de magia.
+                </p>
+            </div>
+        </div>
+
+        <!-- Columna Derecha / Lista de Productos -->
+        <div class="w-full lg:w-7/12 flex flex-col space-y-10 lg:pl-4">
+            
+            <!-- Categoría 1 -->
+            <section id="clasicas" class="reveal scroll-mt-24">
+                <div class="flex items-center mb-6">
+                    <span class="bg-gradient-to-br from-fresa-400 to-fresa-600 text-white rounded-2xl w-14 h-14 flex items-center justify-center text-3xl shadow-lg shadow-fresa-300 transform -rotate-6 float-anim">🍓</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-800 ml-4 relative">
+                        Las Clásicas
+                        <div class="absolute -bottom-2 left-0 w-1/2 h-1.5 bg-fresa-300 rounded-full"></div>
+                    </h2>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Item 1 -->
+                    <div class="group relative bg-white p-5 sm:p-6 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-white hover:border-fresa-200 flex flex-col sm:flex-row justify-between sm:items-center overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-fresa-400 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300"></div>
+                        <div class="pr-0 sm:pr-6 mb-3 sm:mb-0">
+                            <h3 class="font-bold text-2xl text-gray-900 group-hover:text-fresa-600 transition-colors">Fresas con Crema Tradicional</h3>
+                            <p class="text-gray-500 mt-2 leading-relaxed">Fresas frescas de huerto bañadas en nuestra crema dulce receta especial de la casa.</p>
+                        </div>
+                        <div class="flex items-center sm:block mt-2 sm:mt-0">
+                            <div class="flex items-center gap-3">
+                                <span class="font-extrabold text-fresa-500 text-3xl sm:text-4xl whitespace-nowrap bg-fresa-50 px-4 py-2 rounded-2xl group-hover:bg-fresa-100 transition-colors" aria-label="Precio: 55 pesos">$55</span>
+                                <button onclick="addToCart('Fresas Tradicionales', 55)" aria-label="Añadir Fresas con Crema Tradicional al carrito" class="bg-white border-2 border-fresa-200 hover:bg-fresa-500 hover:border-fresa-500 hover:text-white text-fresa-500 rounded-2xl w-12 h-12 flex items-center justify-center transition-all shadow-sm transform hover:scale-110 active:scale-95">
+                                    <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Item 2 -->
+                    <div class="group relative bg-white p-5 sm:p-6 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-white hover:border-fresa-200 flex flex-col sm:flex-row justify-between sm:items-center overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-fresa-400 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300"></div>
+                        <div class="pr-0 sm:pr-6 mb-3 sm:mb-0">
+                            <h3 class="font-bold text-2xl text-gray-900 group-hover:text-fresa-600 transition-colors">La Combinada</h3>
+                            <p class="text-gray-500 mt-2 leading-relaxed">Mitad fresas, mitad durazno, con nuestra deliciosa crema y un toque de canela.</p>
+                        </div>
+                        <div class="flex items-center sm:block mt-2 sm:mt-0">
+                            <div class="flex items-center gap-3">
+                                <span class="font-extrabold text-fresa-500 text-3xl sm:text-4xl whitespace-nowrap bg-fresa-50 px-4 py-2 rounded-2xl group-hover:bg-fresa-100 transition-colors" aria-label="Precio: 65 pesos">$65</span>
+                                <button onclick="addToCart('La Combinada', 65)" aria-label="Añadir La Combinada al carrito" class="bg-white border-2 border-fresa-200 hover:bg-fresa-500 hover:border-fresa-500 hover:text-white text-fresa-500 rounded-2xl w-12 h-12 flex items-center justify-center transition-all shadow-sm transform hover:scale-110 active:scale-95">
+                                    <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categoría 2 -->
+            <section id="especialidades" class="reveal scroll-mt-24">
+                <div class="flex items-center mb-6">
+                    <span class="bg-gradient-to-br from-purple-400 to-purple-600 text-white rounded-2xl w-14 h-14 flex items-center justify-center text-3xl shadow-lg shadow-purple-300 transform rotate-6 float-anim" style="animation-delay: 0.5s;">✨</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-800 ml-4 relative">
+                        Especialidades
+                        <div class="absolute -bottom-2 left-0 w-1/2 h-1.5 bg-purple-300 rounded-full"></div>
+                    </h2>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Item 3 -->
+                    <div class="group relative bg-white p-5 sm:p-6 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-white hover:border-purple-200 flex flex-col sm:flex-row justify-between sm:items-center overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-purple-400 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300"></div>
+                        <div class="pr-0 sm:pr-6 mb-3 sm:mb-0">
+                            <h3 class="font-bold text-2xl text-gray-900 group-hover:text-purple-600 transition-colors">Fresa Nutella</h3>
+                            <p class="text-gray-500 mt-2 leading-relaxed">Fresas clásicas cubiertas con Nutella, nuez picada y corona de crema batida.</p>
+                        </div>
+                        <div class="flex items-center sm:block mt-2 sm:mt-0">
+                            <div class="flex items-center gap-3">
+                                <span class="font-extrabold text-purple-600 text-3xl sm:text-4xl whitespace-nowrap bg-purple-50 px-4 py-2 rounded-2xl group-hover:bg-purple-100 transition-colors" aria-label="Precio: 80 pesos">$80</span>
+                                <button onclick="addToCart('Fresa Nutella', 80)" aria-label="Añadir Fresa con Nutella al carrito" class="bg-white border-2 border-purple-200 hover:bg-purple-500 hover:border-purple-500 hover:text-white text-purple-500 rounded-2xl w-12 h-12 flex items-center justify-center transition-all shadow-sm transform hover:scale-110 active:scale-95">
+                                    <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Item 4 -->
+                    <div class="group relative bg-gradient-to-r from-fresa-50 to-white p-5 sm:p-6 rounded-3xl shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-fresa-100 flex flex-col sm:flex-row justify-between sm:items-center overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-xs sm:text-sm font-extrabold px-4 py-1.5 rounded-bl-2xl uppercase tracking-wider shadow-sm z-10">⭐ Más Vendido</div>
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-yellow-400 to-fresa-500"></div>
+                        
+                        <div class="pr-0 sm:pr-16 mb-3 sm:mb-0 mt-4 sm:mt-0">
+                            <h3 class="font-bold text-2xl text-gray-900 group-hover:text-fresa-600 transition-colors">La Súper Fresa</h3>
+                            <p class="text-gray-600 mt-2 leading-relaxed font-medium">Doble porción de fresas, crema, lechera, chispas de chocolate y galleta oreo.</p>
+                        </div>
+                        <div class="flex items-center sm:block mt-2 sm:mt-0 z-10">
+                            <div class="flex items-center gap-3">
+                                <span class="font-extrabold text-fresa-600 text-3xl sm:text-4xl whitespace-nowrap bg-white px-4 py-2 rounded-2xl shadow-sm border border-fresa-100" aria-label="Precio: 95 pesos">$95</span>
+                                <button onclick="addToCart('La Súper Fresa', 95)" aria-label="Añadir La Súper Fresa al carrito" class="bg-fresa-500 border-2 border-fresa-500 hover:bg-fresa-600 hover:border-fresa-600 text-white rounded-2xl w-12 h-12 flex items-center justify-center transition-all shadow-lg transform hover:scale-110 active:scale-95">
+                                    <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nueva Categoría: Bebidas -->
+            <section id="bebidas" class="reveal scroll-mt-24">
+                <div class="flex items-center mb-6">
+                    <span class="bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-2xl w-14 h-14 flex items-center justify-center text-3xl shadow-lg shadow-blue-300 transform -rotate-6 float-anim" style="animation-delay: 1s;">🥤</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-800 ml-4 relative">
+                        Para Acompañar
+                        <div class="absolute -bottom-2 left-0 w-1/2 h-1.5 bg-blue-300 rounded-full"></div>
+                    </h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Item 5 -->
+                    <div class="bg-white p-5 rounded-3xl shadow-sm hover:shadow-lg transition-all border border-gray-100 hover:border-blue-200">
+                        <div class="flex justify-between items-start">
+                            <div class="pr-2">
+                                <h3 class="font-bold text-xl text-gray-900">Agua de Fresa Natural</h3>
+                                <p class="text-sm text-gray-500 mt-1">Con trocitos de fruta (1L).</p>
+                            </div>
+                            <div class="flex flex-col items-end gap-2">
+                                <span class="font-bold text-blue-500 text-2xl bg-blue-50 px-3 py-1 rounded-xl">$35</span>
+                                <button onclick="addToCart('Agua de Fresa (1L)', 35)" aria-label="Añadir Agua de Fresa al carrito" class="text-blue-500 hover:bg-blue-50 p-2 rounded-xl transition-colors active:scale-95 transform">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Item 6 -->
+                    <div class="bg-white p-5 rounded-3xl shadow-sm hover:shadow-lg transition-all border border-gray-100 hover:border-blue-200">
+                        <div class="flex justify-between items-start">
+                            <div class="pr-2">
+                                <h3 class="font-bold text-xl text-gray-900">Malteada Extrema</h3>
+                                <p class="text-sm text-gray-500 mt-1">Helado, leche y crema batida.</p>
+                            </div>
+                            <div class="flex flex-col items-end gap-2">
+                                <span class="font-bold text-blue-500 text-2xl bg-blue-50 px-3 py-1 rounded-xl">$60</span>
+                                <button onclick="addToCart('Malteada Extrema', 60)" aria-label="Añadir Malteada Extrema al carrito" class="text-blue-500 hover:bg-blue-50 p-2 rounded-xl transition-colors active:scale-95 transform">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Combos -->
+            <section id="combos" class="reveal scroll-mt-24">
+                <div class="flex items-center mb-6">
+                    <span class="bg-gradient-to-br from-orange-400 to-red-500 text-white rounded-2xl w-14 h-14 flex items-center justify-center text-3xl shadow-lg shadow-orange-300 transform rotate-6 float-anim">🔥</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-800 ml-4 relative">
+                        Combos Locos
+                        <div class="absolute -bottom-2 left-0 w-1/2 h-1.5 bg-orange-300 rounded-full"></div>
+                    </h2>
+                </div>
+                
+                <div class="bg-gradient-to-br from-orange-50 to-red-50 p-6 sm:p-8 rounded-[2rem] border-2 border-dashed border-orange-200 shadow-md relative overflow-hidden group hover:border-orange-400 transition-colors">
+                    <div class="absolute -right-10 -top-10 bg-orange-500 text-white w-32 h-32 rounded-full flex items-end justify-center pb-4 text-xl font-extrabold transform rotate-12 shadow-lg group-hover:scale-110 transition-transform">
+                        -15%
+                    </div>
+                    
+                    <h3 class="font-bold text-2xl text-orange-600 mb-2">Combo Pareja "Fresa"</h3>
+                    <p class="text-gray-700 mb-4 font-medium max-w-sm">2 Fresas Tradicionales + 2 Aguas Naturales + 2 Toppings a elegir (indicar por Whatsapp).</p>
+                    
+                    <div class="flex flex-wrap items-center gap-4 mt-6">
+                        <span class="text-gray-400 line-through text-2xl font-bold" aria-label="Precio original 200 pesos">$200</span>
+                        <span class="font-extrabold text-orange-600 text-4xl sm:text-5xl" aria-label="Precio de oferta 170 pesos">$170</span>
+                        <button onclick="addToCart('Combo Pareja Fresa', 170)" aria-label="Añadir Combo Pareja Fresa al carrito" class="ml-auto bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-bold shadow-md shadow-orange-500/40 transition-transform hover:-translate-y-1 active:scale-95 flex items-center gap-2">
+                            <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            ¡Añadir Combo!
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NUEVO: Creador Interactivo de Postres -->
+            <section class="reveal scroll-mt-24 mt-8">
+                <div class="relative overflow-hidden bg-gradient-to-br from-fresa-500 via-fresa-600 to-purple-700 p-6 sm:p-8 rounded-[2rem] shadow-2xl text-white border-4 border-fresa-300/30">
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl pointer-events-none"></div>
+                    
+                    <h3 class="text-2xl sm:text-3xl font-extrabold mb-2 relative z-10">¡Arma tu propio postre! 🎨</h3>
+                    <p class="text-fresa-100 mb-6 relative z-10 font-medium">Elige tu tamaño y añade los toppings que más se te antojen.</p>
+                    
+                    <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 relative z-10">
+                        <!-- 1. Base -->
+                        <div class="mb-6">
+                            <h4 class="font-bold text-lg mb-3 flex items-center gap-2"><span class="bg-white/20 w-6 h-6 rounded-full flex items-center justify-center text-sm">1</span> Elige tu tamaño</h4>
+                            <div class="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Tamaño del postre">
+                                <button type="button" role="radio" aria-checked="true" class="custom-base-btn active bg-white text-fresa-600 border-2 border-white rounded-xl py-3 font-bold transition-all shadow-md" data-name="Fresa Custom (Chico)" data-price="45" onclick="selectBase(this)">
+                                    Chico <br><span class="text-sm font-normal opacity-80">$45</span>
+                                </button>
+                                <button type="button" role="radio" aria-checked="false" class="custom-base-btn bg-white/20 text-white border-2 border-transparent hover:bg-white/30 rounded-xl py-3 font-bold transition-all" data-name="Fresa Custom (Grande)" data-price="65" onclick="selectBase(this)">
+                                    Grande <br><span class="text-sm font-normal opacity-80">$65</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 2. Toppings -->
+                        <div class="mb-6">
+                            <h4 class="font-bold text-lg mb-3 flex items-center gap-2"><span class="bg-white/20 w-6 h-6 rounded-full flex items-center justify-center text-sm">2</span> Toppings Extra <span class="text-sm font-normal text-fresa-200 ml-1">($10 c/u)</span></h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" aria-pressed="false" class="custom-topping-btn bg-white/10 hover:bg-white/20 border border-white/30 text-white px-4 py-2 rounded-full font-medium transition-all" data-name="Chispas" data-price="10" onclick="toggleTopping(this)">🍫 Chispas</button>
+                                <button type="button" aria-pressed="false" class="custom-topping-btn bg-white/10 hover:bg-white/20 border border-white/30 text-white px-4 py-2 rounded-full font-medium transition-all" data-name="Granola" data-price="10" onclick="toggleTopping(this)">🌾 Granola</button>
+                                <button type="button" aria-pressed="false" class="custom-topping-btn bg-white/10 hover:bg-white/20 border border-white/30 text-white px-4 py-2 rounded-full font-medium transition-all" data-name="Nuez" data-price="10" onclick="toggleTopping(this)">🥜 Nuez</button>
+                                <button type="button" aria-pressed="false" class="custom-topping-btn bg-white/10 hover:bg-white/20 border border-white/30 text-white px-4 py-2 rounded-full font-medium transition-all" data-name="Amaranto" data-price="10" onclick="toggleTopping(this)">⚪ Amaranto</button>
+                                <button type="button" aria-pressed="false" class="custom-topping-btn bg-white/10 hover:bg-white/20 border border-white/30 text-white px-4 py-2 rounded-full font-medium transition-all" data-name="Lechera" data-price="10" onclick="toggleTopping(this)">🥛 Lechera Extra</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Total & Add -->
+                        <button onclick="addCustomToCart()" aria-label="Añadir postre personalizado al carrito" class="w-full bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-extrabold text-lg py-4 rounded-xl transition-all shadow-xl transform hover:-translate-y-1 active:scale-95 flex justify-between items-center px-6">
+                            <span class="flex items-center gap-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg> Añadir al carrito</span>
+                            <span id="custom-total-display" class="bg-white/40 px-3 py-1.5 rounded-lg text-xl" aria-live="polite">$45</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Galería Instagram -->
+            <section id="galeria" class="reveal scroll-mt-24 mt-8">
+                <div class="flex items-center mb-6">
+                    <span aria-hidden="true" class="bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500 text-white rounded-2xl w-14 h-14 flex items-center justify-center text-3xl shadow-lg shadow-pink-300 transform -rotate-3 float-anim">📸</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-800 ml-4 relative">
+                        #QueFresa
+                        <div class="absolute -bottom-2 left-0 w-1/2 h-1.5 bg-pink-300 rounded-full"></div>
+                    </h2>
+                </div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                    <div class="group relative aspect-square rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=400&q=80" alt="Vista cercana de nuestras deliciosas fresas con crema mostrando los ingredientes frescos" onerror="this.src='https://placehold.co/400x400/ffb6c1/ffffff?text=Falta+Foto+1'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="group relative aspect-square rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer">
+                        <img src="https://imgs.search.brave.com/TxWowq3YdMYZZC59-emEVNzgZCyvrJuz1nZfaEqY0xY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTIz/ODYzMTczNi9lcy9m/b3RvL2NvbG9yaWRv/LXktZGUtYnVlbi1n/dXN0by1jb21vLXlv/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz13QXM3U09GcUZM/WXMtR0dZQlJtMFBa/YUV2ZWFTQWR1Vm1s/eXFNOEZ1V3JBPQ" alt="Cliente disfrutando felizmente de su postre en vaso" onerror="this.src='https://placehold.co/400x400/fbcfe8/db2777?text=Falta+Foto+2'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="group relative aspect-square rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer hidden sm:block">
+                        <img src="https://imgs.search.brave.com/74uZSGZU2iAQho9BnE595cEsIFB-qud9BIVh39Fc4pU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9mcmVz/YXMtY29uLWNyZW1h/LTIxOTQzMTgzLmpw/Zw" alt="Ingredientes frescos, pila de fresas recién lavadas listas para preparar" onerror="this.src='https://placehold.co/400x400/fce7f3/ec4899?text=Falta+Foto+3'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contacto" class="bg-gray-900 text-white pt-16 pb-8 border-t-4 border-fresa-500 mt-12 relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -mt-6">
+            <span class="bg-fresa-500 text-white px-6 py-2 rounded-full font-bold shadow-lg shadow-fresa-500/50">¡Visítanos o Pide a Domicilio!</span>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left relative z-10">
+            <div>
+                <h4 class="font-pacifico text-3xl text-fresa-400 mb-4">¡Que! ¡Fresa!</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">Las mejores fresas con crema de la ciudad. Hechas con amor, frescura y mucha dulzura para alegrar tu día.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-xl mb-4">Horarios</h4>
+                <ul class="text-gray-400 space-y-2 text-sm">
+                    <li>Lunes a Viernes: <span class="text-white">12:00 PM - 9:00 PM</span></li>
+                    <li>Sábados y Domingos: <span class="text-white">10:00 AM - 10:00 PM</span></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-xl mb-4">Contacto</h4>
+                <ul class="text-gray-400 space-y-2 text-sm">
+                    <li>📍 Calle Principal #123, Centro</li>
+                    <li>📞 (555) 4460-3484</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-xs sm:text-sm">
+            &copy; <span id="year"></span> ¡Que! ¡Fresa!. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <!-- Botón Flotante Carrito Seguro (Visible siempre) -->
+    <button onclick="toggleCart()" aria-label="Ver mi pedido flotante" class="fixed bottom-6 right-6 bg-fresa-600 text-white px-4 sm:px-5 h-14 sm:h-16 rounded-full flex items-center justify-center shadow-2xl shadow-fresa-600/50 z-50 float-anim border-2 sm:border-4 border-white gap-3 transition-transform hover:scale-105 active:scale-95">
+        <div class="relative">
+            <svg class="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <span class="cart-badge hidden absolute -top-2 -right-3 bg-red-500 text-white text-[10px] sm:text-xs w-5 h-5 rounded-full items-center justify-center font-bold border-2 border-white" aria-hidden="true">0</span>
+        </div>
+        <span class="font-bold text-base sm:text-lg hidden sm:block" aria-hidden="true">Ver Pedido</span>
+    </button>
+
+    <!-- Drawer del Carrito -->
+    <div id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" class="fixed inset-y-0 right-0 w-full sm:w-[400px] bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-[60] flex flex-col">
+        <div class="p-6 bg-fresa-500 text-white flex justify-between items-center shadow-md z-10">
+            <h2 id="cart-title" class="text-2xl font-bold flex items-center gap-2">
+                <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                Tu Pedido
+            </h2>
+            <button onclick="toggleCart()" aria-label="Cerrar carrito" class="text-white hover:text-fresa-200 bg-white/20 rounded-full p-2 transition-colors">
+                <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50/50">
+            <!-- Los items del carrito se inyectarán aquí -->
+            <p class="text-gray-400 text-center mt-10 flex flex-col items-center gap-2"><span class="text-4xl" aria-hidden="true">🍓</span>Tu carrito está vacío</p>
+        </div>
+        <div class="p-6 bg-white border-t border-gray-100 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)]">
+            <div class="flex justify-between items-end mb-4">
+                <span class="text-gray-500 font-bold">Total estimado:</span>
+                <span id="cart-total" class="text-gray-900 font-extrabold text-3xl">$0</span>
+            </div>
+            <button onclick="enviarWhatsApp()" class="w-full bg-[#25D366] hover:bg-[#1ebd5b] text-white px-6 py-4 rounded-2xl font-bold text-lg transition-transform transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-green-500/30">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.889-4.441 9.889-9.89 0-5.446-4.44-9.888-9.889-9.888-5.45 0-9.888 4.44-9.888 9.888 0 2.126.602 3.737 1.625 5.438l-1.096 4.008 4.081-1.074zm7.398-10.826c-.236-.677-.487-.69-.691-.703-.178-.011-.382-.011-.585-.011-.204 0-.535.076-.814.381-.279.305-1.069 1.043-1.069 2.541 0 1.498 1.094 2.946 1.247 3.15.152.203 2.148 3.276 5.203 4.594.726.313 1.293.5 1.737.64.729.23 1.393.197 1.916.12.585-.086 1.8-.735 2.054-1.446.254-.711.254-1.319.178-1.446-.076-.127-.28-.203-.585-.356-.305-.152-1.804-.889-2.083-.991-.28-.102-.483-.152-.687.152-.204.305-.788.991-.966 1.194-.178.203-.356.229-.661.076-.305-.152-1.288-.475-2.454-1.52-1.043-.935-1.745-2.091-1.949-2.396-.204-.305-.022-.47.13-.622.138-.138.305-.356.458-.534.152-.178.204-.305.305-.508.102-.203.051-.381-.025-.534-.076-.152-.687-1.652-.94-2.261z"/></svg>
+                Enviar por WhatsApp
+            </button>
+        </div>
+    </div>
+    <!-- Overlay del carrito (Fondo oscuro) -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[55] hidden opacity-0 transition-opacity duration-300"></div>
+
+    <!-- Script de Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'es', 
+                includedLanguages: 'es,en', 
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- Scripts para interacciones, animaciones y lógica del carrito -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // --- NAVEGACIÓN Y SCROLL ---
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-md');
+                navbar.classList.replace('bg-white/85', 'bg-white/95');
+            } else {
+                navbar.classList.remove('shadow-md');
+                navbar.classList.replace('bg-white/95', 'bg-white/85');
+            }
+        });
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+
+        // --- TRADUCCIÓN AUTOMÁTICA ---
+        function changeLanguage(lang) {
+            // Cambiar Google Translate
+            const selectField = document.querySelector(".goog-te-combo");
+            if (selectField) {
+                selectField.value = lang;
+                selectField.dispatchEvent(new Event('change'));
+            }
+
+            // Actualizar botones UI
+            const activeClass = "text-xs font-extrabold bg-white text-fresa-600 px-2.5 py-1.5 rounded-full shadow-sm transition-all";
+            const inactiveClass = "text-xs font-extrabold text-gray-400 px-2.5 py-1.5 rounded-full hover:text-fresa-500 transition-all";
+            const activeMobClass = "text-[10px] font-extrabold bg-white text-fresa-600 px-2 py-1 rounded-full shadow-sm transition-all";
+            const inactiveMobClass = "text-[10px] font-extrabold text-gray-400 px-2 py-1 rounded-full hover:text-fresa-500 transition-all";
+
+            if(lang === 'es') {
+                document.querySelectorAll('.lang-btn-es').forEach(el => el.className = activeClass + " lang-btn-es");
+                document.querySelectorAll('.lang-btn-en').forEach(el => el.className = inactiveClass + " lang-btn-en");
+                document.querySelectorAll('.lang-btn-es-mob').forEach(el => el.className = activeMobClass + " lang-btn-es-mob");
+                document.querySelectorAll('.lang-btn-en-mob').forEach(el => el.className = inactiveMobClass + " lang-btn-en-mob");
+            } else {
+                document.querySelectorAll('.lang-btn-en').forEach(el => el.className = activeClass + " lang-btn-en");
+                document.querySelectorAll('.lang-btn-es').forEach(el => el.className = inactiveClass + " lang-btn-es");
+                document.querySelectorAll('.lang-btn-en-mob').forEach(el => el.className = activeMobClass + " lang-btn-en-mob");
+                document.querySelectorAll('.lang-btn-es-mob').forEach(el => el.className = inactiveMobClass + " lang-btn-es-mob");
+            }
+        }
+
+        // --- LÓGICA DEL CARRITO DE COMPRAS ---
+        let cart = [];
+        let customBase = { name: 'Fresa Custom (Chico)', price: 45 };
+        let customToppings = [];
+
+        // Función Principal para añadir al carrito global
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCartUI();
+            showToast(`¡${name} agregado! 🍓`);
+        }
+
+        // Lógica del Creador de Postres Interactivo
+        function selectBase(btn) {
+            document.querySelectorAll('.custom-base-btn').forEach(b => {
+                b.classList.remove('bg-white', 'text-fresa-600', 'border-white', 'shadow-md');
+                b.classList.add('bg-white/20', 'text-white', 'border-transparent');
+                b.setAttribute('aria-checked', 'false');
+            });
+            btn.classList.remove('bg-white/20', 'text-white', 'border-transparent');
+            btn.classList.add('bg-white', 'text-fresa-600', 'border-white', 'shadow-md');
+            btn.setAttribute('aria-checked', 'true');
+            
+            customBase = { 
+                name: btn.getAttribute('data-name'), 
+                price: parseInt(btn.getAttribute('data-price')) 
+            };
+            updateCustomTotalDisplay();
+        }
+
+        function toggleTopping(btn) {
+            const name = btn.getAttribute('data-name');
+            const price = parseInt(btn.getAttribute('data-price'));
+            
+            if (btn.classList.contains('active-topping')) {
+                btn.classList.remove('active-topping', 'bg-white', 'text-fresa-600', 'shadow-md');
+                btn.classList.add('bg-white/10', 'text-white', 'border-white/30');
+                btn.setAttribute('aria-pressed', 'false');
+                customToppings = customToppings.filter(t => t.name !== name);
+            } else {
+                btn.classList.remove('bg-white/10', 'text-white', 'border-white/30');
+                btn.classList.add('active-topping', 'bg-white', 'text-fresa-600', 'shadow-md');
+                btn.setAttribute('aria-pressed', 'true');
+                customToppings.push({ name, price });
+            }
+            updateCustomTotalDisplay();
+        }
+
+        function updateCustomTotalDisplay() {
+            const total = customBase.price + customToppings.reduce((sum, t) => sum + t.price, 0);
+            document.getElementById('custom-total-display').innerText = `$${total}`;
+        }
+
+        function addCustomToCart() {
+            const total = customBase.price + customToppings.reduce((sum, t) => sum + t.price, 0);
+            const toppingNames = customToppings.length > 0 ? ` (Extras: ${customToppings.map(t => t.name).join(', ')})` : '';
+            const finalName = `${customBase.name}${toppingNames}`;
+            
+            addToCart(finalName, total);
+            
+            if(document.getElementById('cart-drawer').classList.contains('translate-x-full')) {
+                toggleCart();
+            }
+            
+            document.querySelectorAll('.custom-topping-btn.active-topping').forEach(btn => toggleTopping(btn));
+            selectBase(document.querySelector('.custom-base-btn')); 
+        }
+
+        // Actualizar la interfaz del Carrito Lateral
+        function updateCartUI() {
+            const cartItemsDiv = document.getElementById('cart-items');
+            const cartTotalSpan = document.getElementById('cart-total');
+            const cartBadges = document.querySelectorAll('.cart-badge');
+            
+            cartItemsDiv.innerHTML = '';
+            let total = 0;
+            
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p class="text-gray-400 text-center mt-10 flex flex-col items-center gap-2"><span class="text-4xl" aria-hidden="true">🍓</span>Tu carrito está vacío</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    cartItemsDiv.innerHTML += `
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group">
+                            <div class="flex-1 pr-4">
+                                <p class="font-bold text-gray-800 text-sm leading-snug">${item.name}</p>
+                                <p class="text-fresa-500 font-extrabold mt-1">$${item.price}</p>
+                            </div>
+                            <button onclick="removeFromCart(${index})" aria-label="Eliminar ${item.name} del carrito" class="text-red-300 hover:text-red-500 bg-red-50 p-2 rounded-xl transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    `;
+                });
+            }
+            
+            cartTotalSpan.innerText = `$${total}`;
+            cartBadges.forEach(badge => {
+                badge.innerText = cart.length;
+                if (cart.length > 0) {
+                    badge.classList.remove('hidden');
+                    badge.classList.add('flex');
+                } else {
+                    badge.classList.add('hidden');
+                    badge.classList.remove('flex');
+                }
+            });
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // Abrir / Cerrar menú lateral del carrito
+        function toggleCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-overlay');
+            const navButtons = document.querySelectorAll('[aria-controls="cart-drawer"]');
+            
+            const isOpening = drawer.classList.contains('translate-x-full');
+            
+            if (isOpening) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+
+            navButtons.forEach(btn => btn.setAttribute('aria-expanded', isOpening));
+        }
+
+        // Generar y Enviar el pedido por WhatsApp
+        function enviarWhatsApp() {
+            if (cart.length === 0) {
+                alert('¡Tu carrito está vacío! Agrega algo delicioso primero.');
+                return;
+            }
+            
+            const waNumber = "525544603484";
+            let text = "¡Hola *¡Que! ¡Fresa!*! 🍓\nQuiero hacer el siguiente pedido:\n\n";
+            let total = 0;
+            
+            cart.forEach((item) => {
+                text += `🔸 1x ${item.name} - *$${item.price}*\n`;
+                total += item.price;
+            });
+            
+            text += `\n*Total a pagar: $${total}*\n\n¡Muchas gracias!`;
+            const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        // Notificación flotante (Toast optimizado para no sobrecargar el DOM)
+        function showToast(msg) {
+            // Eliminar toast anterior si existe para evitar que se amontonen y den tirones
+            const oldToast = document.getElementById('toast-msg');
+            if(oldToast) oldToast.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'toast-msg';
+            toast.setAttribute('aria-live', 'polite');
+            toast.className = 'fixed bottom-28 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full font-bold shadow-2xl z-[70] opacity-0 transition-opacity duration-300 pointer-events-none text-center min-w-[200px]';
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.remove('opacity-0'), 10);
+            setTimeout(() => {
+                if(toast.parentNode) {
+                    toast.classList.add('opacity-0');
+                    setTimeout(() => { if(toast.parentNode) toast.remove() }, 300);
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
